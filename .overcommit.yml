@@ -10,4 +10,5 @@ PrePush:
     description: 'Run Cargo tests'
     required_executable: 'cargo'
     flags: ['test']
+    requires_files: true
     include: "**/*.rs"
