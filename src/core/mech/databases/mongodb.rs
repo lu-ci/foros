@@ -15,7 +15,7 @@ impl MongoDatabase {
             Ok(client) => client,
             Err(why) => {
                 println!("Database Connection Error: {}", why);
-                exit(1);
+                exit(10053);
             }
         };
         Self { config, client }
@@ -31,5 +31,11 @@ impl MongoDatabase {
         }
         let client = MongoClient::with_uri(&connection_string)?;
         Ok(client)
+    }
+    pub fn get_config(&self) -> &DatabaseConfiguration {
+        &self.config
+    }
+    pub fn get_client(&self) -> MongoClient {
+        self.client.clone()
     }
 }
