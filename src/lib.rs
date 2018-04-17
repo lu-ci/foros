@@ -10,6 +10,7 @@ pub mod core;
 #[cfg(test)]
 mod tests {
     #[test]
+    #[ignore]
     fn test_database() {
         use core::mech::configuration::DatabaseConfiguration;
         use core::mech::databases::mongodb::MongoDatabase;
