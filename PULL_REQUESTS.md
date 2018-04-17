@@ -16,7 +16,7 @@ Merging or closing of pull requests is solely at the discretion of the owners of
 
 ### Rust
 
-All Rust code must abide by the proper formatting of the official Rust Formatting [RFC 1607.](). For detailed information how the styling works you can read the [formatting guide](https://github.com/rust-lang-nursery/fmt-rfcs/blob/master/guide/guide.md).
+All Rust code must abide by the proper formatting of the official Rust Formatting [RFC 1607.](https://github.com/rust-lang/rfcs/pull/1607). For detailed information how the styling works you can read the [formatting guide](https://github.com/rust-lang-nursery/fmt-rfcs/blob/master/guide/guide.md).
 
 ### Ruby
 
