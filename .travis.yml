@@ -3,7 +3,8 @@ cache: cargo
 rust:
   - stable
   - nightly
-
+services:
+  - "mongodb"
 matrix:
   allow_failures:
     - rust: nightly
