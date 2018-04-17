@@ -1,0 +1,18 @@
+[package]
+name = "foros"
+version = "0.0.0"
+authors = ["Aleksa Radovic <thealeksaradovic@gmail.com>", "Patrick Auernig <dev.patrick.auernig@gmail.com>"]
+description = "Framework of Red Oxidized Snakes"
+homepage = "https://lucia.moe"
+repository = "https://github.com/lu-ci/foros.git"
+readme = "README.md"
+keywords = ["bot", "framework", "discord"]
+license = "GPL-3.0"
+publish = false # safeguard
+
+[badges]
+appveyor = { repository = "lu-ci/foros" }
+travis-ci = { repository = "lu-ci/foros" }
+maintenance = { status = "experimental" }
+
+[dependencies]
