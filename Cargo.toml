@@ -16,3 +16,5 @@ travis-ci = { repository = "lu-ci/foros" }
 maintenance = { status = "experimental" }
 
 [dependencies]
+bson = "0.11.1"
+mongodb = "0.3.7"
