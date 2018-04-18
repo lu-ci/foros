@@ -10,7 +10,6 @@ pub mod core;
 #[cfg(test)]
 mod tests {
     #[test]
-    // #[ignore]
     fn test_database() {
         use core::mech::configuration::DatabaseConfiguration;
         use core::mech::databases::mongodb::MongoDatabase;
@@ -40,10 +39,16 @@ mod tests {
         assert!(count_success);
         let document = doc! { "test_string": "Alex loves spaghetti." };
         println!("Testing document insertion.");
-        let insert_success: bool = match db_collection.insert_one(document, None) {
+        let insert_success: bool = match db_collection.insert_one(document.clone(), None) {
             Ok(_) => true,
             Err(_) => false
         };
         assert!(insert_success);
+        println!("Testing document deletion.");
+        let delete_success: bool = match db_collection.delete_one(document, None) {
+            Ok(_) => true,
+            Err(_) => false
+        };
+        assert!(delete_success);
     }
 }
