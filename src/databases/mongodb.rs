@@ -1,14 +1,10 @@
-use std::{
-    io::Result,
-    process::exit,
-};
-
 use mongodb::{
     Client as MongoClient,
     ThreadedClient,
 };
 
 use ::configuration::DatabaseConfiguration;
+use ::error::Result;
 
 
 pub struct MongoDatabase {
@@ -17,15 +13,8 @@ pub struct MongoDatabase {
 }
 
 impl MongoDatabase {
-    pub fn new(config: DatabaseConfiguration) -> Self {
-        let client = match Self::connect(&config) {
-            Ok(client) => client,
-            Err(why) => {
-                println!("Database Connection Error: {}", why);
-                exit(10053);
-            }
-        };
-        Self { config, client }
+    pub fn new(config: DatabaseConfiguration) -> Result<Self> {
+        Ok(Self { client: Self::connect(&config)?, config })
     }
 
     fn connect(config: &DatabaseConfiguration) -> Result<MongoClient> {
@@ -61,7 +50,7 @@ mod tests {
         let db_config: DatabaseConfiguration = DatabaseConfiguration::new(
             "mongodb", "127.0.0.1", 27017, "root", "5up3r53cur3pa55w0rd", false, "omega"
         );
-        let db_instance: MongoDatabase = MongoDatabase::new(db_config);
+        let db_instance: MongoDatabase = MongoDatabase::new(db_config).unwrap();
         let db_client: MongoClient = db_instance.client;
         return db_client;
     }
