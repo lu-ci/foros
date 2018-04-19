@@ -20,11 +20,12 @@ impl MongoDatabase {
         };
         Self { config, client }
     }
+
     fn connect(config: &DatabaseConfiguration) -> Result<MongoClient> {
         let connection_string: String;
-        let conn_part: String = format!("{}:{}", config.get_address(), config.get_port().to_owned());
-        if config.authenticate() {
-            let auth_part: String = format!("{}:{}", config.get_username(), config.get_password());
+        let conn_part: String = format!("{}:{}", config.address, config.port);
+        if config.authenticate {
+            let auth_part: String = format!("{}:{}", config.username, config.password);
             connection_string = format!("mongodb://{}@{}", conn_part, auth_part);
         } else {
             connection_string = format!("mongodb://{}", conn_part);
@@ -32,9 +33,11 @@ impl MongoDatabase {
         let client = MongoClient::with_uri(&connection_string)?;
         Ok(client)
     }
+
     pub fn get_config(&self) -> &DatabaseConfiguration {
         &self.config
     }
+
     pub fn get_client(&self) -> MongoClient {
         self.client.clone()
     }
