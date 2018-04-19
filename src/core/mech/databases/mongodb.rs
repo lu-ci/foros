@@ -5,8 +5,8 @@ use std::io::Result;
 use std::process::exit;
 
 pub struct MongoDatabase {
-    config: DatabaseConfiguration,
-    client: MongoClient,
+    pub config: DatabaseConfiguration,
+    pub client: MongoClient,
 }
 
 impl MongoDatabase {
@@ -33,14 +33,6 @@ impl MongoDatabase {
         let client = MongoClient::with_uri(&connection_string)?;
         Ok(client)
     }
-
-    pub fn get_config(&self) -> &DatabaseConfiguration {
-        &self.config
-    }
-
-    pub fn get_client(&self) -> MongoClient {
-        self.client.clone()
-    }
 }
 
 #[cfg(test)]
@@ -52,16 +44,11 @@ mod tests {
     use mongodb::db::ThreadedDatabase;
 
     fn get_db_client() -> MongoClient {
-        let handler: String = "mongodb".to_owned();
-        let address: String = "127.0.0.1".to_owned();
-        let port: i16 = 27017;
-        let authenticate: bool = false;
-        let username: String = "root".to_owned();
-        let password: String = "5up3r53cur3pa55w0rd".to_owned();
-        let database: String = "omega".to_owned();
-        let db_config: DatabaseConfiguration = DatabaseConfiguration::new(handler, address, port, username, password, authenticate, database);
+        let db_config: DatabaseConfiguration = DatabaseConfiguration::new(
+            "mongodb", "127.0.0.1", 27017, "root", "5up3r53cur3pa55w0rd", false, "omega"
+        );
         let db_instance: MongoDatabase = MongoDatabase::new(db_config);
-        let db_client: MongoClient = db_instance.get_client();
+        let db_client: MongoClient = db_instance.client;
         return db_client;
     }
 
