@@ -1,8 +1,15 @@
-use core::mech::configuration::DatabaseConfiguration;
-use mongodb::Client as MongoClient;
-use mongodb::ThreadedClient;
-use std::io::Result;
-use std::process::exit;
+use std::{
+    io::Result,
+    process::exit,
+};
+
+use mongodb::{
+    Client as MongoClient,
+    ThreadedClient,
+};
+
+use ::configuration::DatabaseConfiguration;
+
 
 pub struct MongoDatabase {
     pub config: DatabaseConfiguration,
@@ -35,13 +42,20 @@ impl MongoDatabase {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
-    use core::mech::configuration::DatabaseConfiguration;
-    use super::MongoDatabase;
-    use super::MongoClient;
-    use super::ThreadedClient;
-    use mongodb::db::ThreadedDatabase;
+    use mongodb::{
+        Client as MongoClient,
+        ThreadedClient,
+        db::ThreadedDatabase,
+    };
+
+    use super::{
+        DatabaseConfiguration,
+        MongoDatabase,
+    };
+
 
     fn get_db_client() -> MongoClient {
         let db_config: DatabaseConfiguration = DatabaseConfiguration::new(

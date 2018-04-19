@@ -1,11 +1,13 @@
-use serde_json;
-use serde_yaml;
-use serde::de::DeserializeOwned;
 use std::{
     fs::File,
     path::Path,
     process::exit,
 };
+
+use serde::de::DeserializeOwned;
+use serde_json;
+use serde_yaml;
+
 
 trait FromJson: Sized + DeserializeOwned {
     fn from_json<P>(location: P) -> Self
@@ -51,6 +53,7 @@ trait FromYaml: Sized + DeserializeOwned {
     }
 }
 
+
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DiscordConfiguration {
     pub bot: bool,
@@ -72,6 +75,7 @@ impl DiscordConfiguration {
 
 impl FromJson for DiscordConfiguration {}
 impl FromYaml for DiscordConfiguration {}
+
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DatabaseConfiguration {
