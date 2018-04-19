@@ -1,10 +1,55 @@
 use serde_json;
 use serde_yaml;
+use serde::de::DeserializeOwned;
 use std::{
     fs::File,
     path::Path,
     process::exit,
 };
+
+trait FromJson: Sized + DeserializeOwned {
+    fn from_json<P>(location: P) -> Self
+        where P: AsRef<Path>
+    {
+        let file: File = match File::open(location) {
+            Ok(file) => file,
+            Err(why) => {
+                println!("JSON Location Error: {}", why);
+                exit(2);
+            }
+        };
+
+        match serde_json::from_reader(file) {
+            Ok(config) => config,
+            Err(why) => {
+                println!("JSON Parsing Error: {}", why);
+                exit(8);
+            }
+        }
+    }
+}
+
+trait FromYaml: Sized + DeserializeOwned {
+    fn from_yaml<P>(location: P) -> Self
+        where P: AsRef<Path>
+    {
+        let file: File = match File::open(location) {
+            Ok(file) => file,
+            Err(why) => {
+                println!("YAML Location Error: {}", why);
+                exit(2);
+            }
+        };
+
+        match serde_yaml::from_reader(file) {
+            Ok(config) => config,
+            Err(why) => {
+                println!("YAML Parsing Error: {}", why);
+                exit(8);
+            }
+        }
+    }
+}
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DiscordConfiguration {
@@ -23,47 +68,10 @@ impl DiscordConfiguration {
             owner
         }
     }
-
-    pub fn from_json<P>(location: P) -> Self
-        where P: AsRef<Path>
-    {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("Discord Config JSON Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_json::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("Discord Config JSON Parsing Error: {}", why);
-                exit(8);
-            }
-        }
-    }
-
-    pub fn from_yaml<P>(location: P) -> Self
-        where P: AsRef<Path>
-    {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("Discord Config YAML Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_yaml::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("Discord Config YAML Parsing Error: {}", why);
-                exit(8);
-            }
-        }
-    }
 }
+
+impl FromJson for DiscordConfiguration {}
+impl FromYaml for DiscordConfiguration {}
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DatabaseConfiguration {
@@ -90,44 +98,7 @@ impl DatabaseConfiguration {
             port,
         }
     }
-
-    pub fn from_json<P>(location: P) -> Self
-        where P: AsRef<Path>
-    {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("MongoDB Config JSON Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_json::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("MongoDB Config JSON Parsing Error: {}", why);
-                exit(8);
-            }
-        }
-    }
-
-    pub fn from_yaml<P>(location: P) -> Self
-        where P: AsRef<Path>
-    {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("MongoDB Config YAML Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_yaml::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("MongoDB Config YAML Parsing Error: {}", why);
-                exit(8);
-            }
-        }
-    }
 }
+
+impl FromJson for DatabaseConfiguration {}
+impl FromYaml for DatabaseConfiguration {}
