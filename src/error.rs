@@ -10,6 +10,7 @@ use std::{
 };
 
 use serde_json as json;
+use serde_yaml as yaml;
 use mongodb;
 
 
@@ -17,6 +18,7 @@ use mongodb;
 pub enum Error {
     IoError(io::Error),
     JsonError(json::Error),
+    YamlError(yaml::Error),
     MongodbError(mongodb::Error),
 }
 
@@ -31,6 +33,7 @@ impl StdError for Error {
         match *self {
             Error::IoError(ref err) => err.description(),
             Error::JsonError(ref err) => err.description(),
+            Error::YamlError(ref err) => err.description(),
             Error::MongodbError(ref err) => err.description(),
         }
     }
@@ -45,6 +48,12 @@ impl From<io::Error> for Error {
 impl From<json::Error> for Error {
     fn from(err: json::Error) -> Self {
         Error::JsonError(err)
+    }
+}
+
+impl From<yaml::Error> for Error {
+    fn from(err: yaml::Error) -> Self {
+        Error::YamlError(err)
     }
 }
 

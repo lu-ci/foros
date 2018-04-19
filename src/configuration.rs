@@ -1,55 +1,32 @@
 use std::{
     fs::File,
     path::Path,
-    process::exit,
 };
 
 use serde::de::DeserializeOwned;
 use serde_json;
 use serde_yaml;
 
+use ::error::Result;
+
 
 trait FromJson: Sized + DeserializeOwned {
-    fn from_json<P>(location: P) -> Self
+    fn from_json<P>(location: P) -> Result<Self>
         where P: AsRef<Path>
     {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("JSON Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_json::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("JSON Parsing Error: {}", why);
-                exit(8);
-            }
-        }
+        let file = File::open(location)?;
+        let json = serde_json::from_reader(file)?;
+        Ok(json)
     }
 }
 
 trait FromYaml: Sized + DeserializeOwned {
-    fn from_yaml<P>(location: P) -> Self
+    fn from_yaml<P>(location: P) -> Result<Self>
         where P: AsRef<Path>
     {
-        let file: File = match File::open(location) {
-            Ok(file) => file,
-            Err(why) => {
-                println!("YAML Location Error: {}", why);
-                exit(2);
-            }
-        };
-
-        match serde_yaml::from_reader(file) {
-            Ok(config) => config,
-            Err(why) => {
-                println!("YAML Parsing Error: {}", why);
-                exit(8);
-            }
-        }
+        let file = File::open(location)?;
+        let yaml = serde_yaml::from_reader(file)?;
+        Ok(yaml)
     }
 }
 
