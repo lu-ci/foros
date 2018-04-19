@@ -10,8 +10,8 @@ use serde_yaml;
 use ::error::Result;
 
 
-trait FromJson: Sized + DeserializeOwned {
-    fn from_json<P>(location: P) -> Result<Self>
+trait TryFromJson: Sized + DeserializeOwned {
+    fn try_from_json<P>(location: P) -> Result<Self>
         where P: AsRef<Path>
     {
         let file = File::open(location)?;
@@ -20,8 +20,8 @@ trait FromJson: Sized + DeserializeOwned {
     }
 }
 
-trait FromYaml: Sized + DeserializeOwned {
-    fn from_yaml<P>(location: P) -> Result<Self>
+trait TryFromYaml: Sized + DeserializeOwned {
+    fn try_from_yaml<P>(location: P) -> Result<Self>
         where P: AsRef<Path>
     {
         let file = File::open(location)?;
@@ -50,8 +50,8 @@ impl DiscordConfiguration {
     }
 }
 
-impl FromJson for DiscordConfiguration {}
-impl FromYaml for DiscordConfiguration {}
+impl TryFromJson for DiscordConfiguration {}
+impl TryFromYaml for DiscordConfiguration {}
 
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -81,5 +81,5 @@ impl DatabaseConfiguration {
     }
 }
 
-impl FromJson for DatabaseConfiguration {}
-impl FromYaml for DatabaseConfiguration {}
+impl TryFromJson for DatabaseConfiguration {}
+impl TryFromYaml for DatabaseConfiguration {}
