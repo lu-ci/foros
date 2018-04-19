@@ -20,6 +20,7 @@ pub enum Error {
     JsonError(json::Error),
     YamlError(yaml::Error),
     MongodbError(mongodb::Error),
+    UnknownFiletype
 }
 
 impl Display for Error {
@@ -31,6 +32,7 @@ impl Display for Error {
 impl StdError for Error {
     fn description(&self) -> &str {
         match *self {
+            Error::UnknownFiletype => "Unknown filetype",
             Error::IoError(ref err) => err.description(),
             Error::JsonError(ref err) => err.description(),
             Error::YamlError(ref err) => err.description(),

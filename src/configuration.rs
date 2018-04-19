@@ -7,26 +7,20 @@ use serde::de::DeserializeOwned;
 use serde_json;
 use serde_yaml;
 
-use ::error::Result;
+use ::error::{Error, Result};
 
 
-trait TryFromJson: Sized + DeserializeOwned {
-    fn try_from_json<P>(location: P) -> Result<Self>
+trait TryFromPath: DeserializeOwned {
+    fn try_from_path<P>(location: P) -> Result<Self>
         where P: AsRef<Path>
     {
-        let file = File::open(location)?;
-        let json = serde_json::from_reader(file)?;
-        Ok(json)
-    }
-}
-
-trait TryFromYaml: Sized + DeserializeOwned {
-    fn try_from_yaml<P>(location: P) -> Result<Self>
-        where P: AsRef<Path>
-    {
-        let file = File::open(location)?;
-        let yaml = serde_yaml::from_reader(file)?;
-        Ok(yaml)
+        let path = location.as_ref();
+        let file = File::open(path)?;
+        match path.extension() {
+            Some(x) if x.to_str() == Some("json") => Ok(serde_json::from_reader(file)?),
+            Some(x) if x.to_str() == Some("yml") => Ok(serde_yaml::from_reader(file)?),
+            _ => Err(Error::UnknownFiletype),
+        }
     }
 }
 
@@ -50,8 +44,7 @@ impl DiscordConfiguration {
     }
 }
 
-impl TryFromJson for DiscordConfiguration {}
-impl TryFromYaml for DiscordConfiguration {}
+impl TryFromPath for DiscordConfiguration {}
 
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -81,5 +74,4 @@ impl DatabaseConfiguration {
     }
 }
 
-impl TryFromJson for DatabaseConfiguration {}
-impl TryFromYaml for DatabaseConfiguration {}
+impl TryFromPath for DatabaseConfiguration {}
