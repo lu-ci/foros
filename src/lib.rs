@@ -9,3 +9,4 @@ extern crate serde_yaml;
 
 pub mod configuration;
 pub mod databases;
+pub mod error;
